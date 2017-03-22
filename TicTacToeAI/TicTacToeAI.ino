@@ -20,6 +20,9 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+  // Gets Clients coming form server
+  BridgeClient client = server.accept();
+
   bool isNewMove = false;
   bool finishMove = false;
   bool canMove = false;
