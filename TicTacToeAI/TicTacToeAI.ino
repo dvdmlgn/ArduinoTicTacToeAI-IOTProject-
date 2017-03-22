@@ -1,5 +1,20 @@
+#include <Bridge.h>
+#include <BridgeServer.h>
+#include <BridgeClient.h>
+
+BridgeServer server;
+
 void setup() {
   // put your setup code here, to run once:
+
+  // Bridge setup
+  pinMode(13, OUTPUT);
+  digitalWrite(13, LOW);
+  Bridge.begin();
+  digitalWrite(13, HIGH);
+
+  server.listenOnLocalhost();
+  server.begin();
 }
 
 void loop() {
@@ -14,9 +29,9 @@ void loop() {
   int turnCount = 0;
   int places[9];
 
-  int priority1[] {4};
-  int priority2[] {0, 2, 6, 8};
-  int priority3[] {1, 3, 5, 7};
+  int priority1[] {4}; // middle position
+  int priority2[] {0, 2, 6, 8}; // corner positions
+  int priority3[] {1, 3, 5, 7}; // remaining positions
 
   // Write Code here to change "isNewMove" state from wifi data
 
