@@ -81,7 +81,7 @@ void process(BridgeClient client) {
 }
 
 void digitalCommand(BridgeClient client) {
-  int pin, value;
+  int pin, value = 0;
 
   // Read pin number
   pin = client.parseInt();
@@ -107,13 +107,9 @@ void digitalCommand(BridgeClient client) {
 
   client.println(sizeof(grid));
 
-  for(int i = 0; i < 9; i++)
-  {
-    client.println(grid[i]);
-  
-  }
-
 // Tic Tac Toe AI & Game Logic
+
+grid[value] = 1;
 
   bool isNewMove = false;
   bool finishMove = false;
@@ -127,67 +123,85 @@ void digitalCommand(BridgeClient client) {
   int priority2[] {0, 2, 6, 8}; // corner positions
   int priority3[] {1, 3, 5, 7}; // remaining positions
 
+    for(int i = 0; i < 9; i++)
+    {
+      if(grid[i] == 1)
+      {
+        isNewMove = true;
+      }
+    }
+
   // This section of Code will determine if there are any available spaces on the grid to make a move
   if(isNewMove)
   {
-    for(int i = 0; i < sizeof(grid); i++)
+    // checks if ai can move
+    for(int i = 0; i < 9; i++)
     {
       if(grid[i] == 0)
       {
         canMove = true;
+        break;
       }
     }
   }
 
   // this section of Code will detmine which space the Arduino will choose the place their mark
-  while(isNewMove && canMove)
-    {
-      for(int i = 0; i < sizeof(priority1); i++)
+      
+      if(canMove && isNewMove)
+      {
+        
+      // checks if center is available
+      for(int i = 0; i < 1; i++)
         {
           if(grid[priority1[i]] == 0)
             {
               grid[priority1[i]] == 2;
-              break;
               finishMove = true;
             }
+
         }
 
-        if(finishMove)
+         // checks if corners are available
+        for(int i = 0; i < 4; i++)
         {
-          break;
-        }
-
-        for(int i = 0; i < sizeof(priority2); i++)
-        {
+          if(!finishMove)
+          {
           if(grid[priority2[i]] == 0)
             {
               grid[priority2[i]] == 2;
-              break;
               finishMove = true;
             }
+          }
         }
 
-        if(finishMove)
+        // checks rest
+        for(int i = 0; i < 4; i++)
         {
-          break;
-        }
-
-        for(int i = 0; i < sizeof(priority3); i++)
-        {
+          if(!finishMove)
+          {
           if(grid[priority3[i]] == 0)
             {
               grid[priority3[i]] == 2;
-              break;
               finishMove = true;
             }
+          }
         }
 
+        }
       
-      }
+
 
  if(finishMove)
   {
     turnCount += 2;
+
+    isNewMove = false;
+  }
+
+    for(int i = 0; i < 9; i++)
+  {
+    client.println(grid[i]);
+  
   }
 
 if(!canMove && turnCount > 0)
@@ -250,7 +264,17 @@ if(!canMove && turnCount > 0)
   }
 
     
-  
+  client.print("New move = ");
+  client.print(isNewMove);
+  client.println();
+
+  client.print("canMove = ");
+  client.print(canMove);
+  client.println();
+
+  client.print("turn count = ");
+  client.print(turnCount);
+  client.println();
   
   // Update datastore key with the current pin value
   String key = "D";
