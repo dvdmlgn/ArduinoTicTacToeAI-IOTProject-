@@ -275,6 +275,10 @@ if(!canMove && turnCount > 0)
   client.print("turn count = ");
   client.print(turnCount);
   client.println();
+
+ client.print("winner = ");
+  client.print(winner);
+  client.println();
   
   // Update datastore key with the current pin value
   String key = "D";
